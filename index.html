@@ -6,39 +6,44 @@
 <title>DISINTEGRATION — Final Week</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Courier New',Courier,monospace;background:#0D0D0D;color:#E8E4DC;min-height:100vh;padding:24px 16px;max-width:680px;margin:0 auto;}
+  body{font-family:'Courier New',Courier,monospace;background:#0D0D0D;color:#E8E4DC;min-height:100vh;padding:24px 16px;max-width:640px;margin:0 auto;}
   .header{text-align:center;margin-bottom:28px;}
   .header .label{font-size:11px;letter-spacing:6px;color:#666;text-transform:uppercase;margin-bottom:8px;}
   .header h1{font-size:28px;font-weight:400;letter-spacing:8px;color:#C0392B;text-transform:uppercase;margin:0 0 4px;}
   .header .sub{font-size:11px;color:#555;letter-spacing:2px;}
-  .progress{margin-bottom:28px;}
+  .progress{margin-bottom:20px;}
   .progress-info{display:flex;justify-content:space-between;font-size:11px;color:#777;margin-bottom:6px;letter-spacing:1px;}
   .progress-bar{height:3px;background:#1A1A1A;border-radius:2px;overflow:hidden;}
   .progress-fill{height:100%;background:linear-gradient(90deg,#C9B458,#D4764E,#8B6CAE);transition:width .5s ease;}
   .progress-fill.done{background:#C0392B;}
-  .day{margin-bottom:22px;}
-  .day-title{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #1A1A1A;}
-  .day-title .d{font-size:17px;font-weight:700;color:#D4764E;}
-  .day.show .d{color:#C0392B;}
-  .day-title .dt{font-size:12px;color:#888;letter-spacing:2px;}
-  .day-title .tag{font-size:9px;letter-spacing:2px;color:#C0392B;font-weight:700;margin-left:auto;}
-  .cols{display:flex;gap:20px;}
-  .col{flex:1;}
-  .col-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;padding-bottom:4px;}
-  .col-tyler .col-head{color:#D4764E;border-bottom:1px solid rgba(212,118,78,.3);}
-  .col-cansu .col-head{color:#8B6CAE;border-bottom:1px solid rgba(139,108,174,.3);}
-  .task{display:flex;gap:8px;cursor:pointer;align-items:flex-start;user-select:none;padding:6px 0;}
-  .cb{width:15px;height:15px;min-width:15px;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px;}
-  .col-tyler .cb{border:1px solid #D4764E;color:#D4764E;}
-  .col-cansu .cb{border:1px solid #8B6CAE;color:#8B6CAE;}
+  .filters{display:flex;gap:8px;margin-bottom:20px;}
+  .filters button{background:transparent;border:1px solid #1A1A1A;color:#555;padding:6px 14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;}
+  .filters button.active{background:#1F1F1F;border-color:#333;color:#E8E4DC;}
+  .days{display:flex;flex-direction:column;gap:6px;}
+  .day{transition:opacity .3s ease;}
+  .day.complete{opacity:.45;}
+  .day-header{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none;}
+  .day-num{font-size:16px;font-weight:700;min-width:38px;letter-spacing:1px;}
+  .day-meta{flex:1;}
+  .day-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .day-date{font-size:12px;color:#999;}
+  .phase-tag{font-size:9px;letter-spacing:2px;padding:2px 6px;text-transform:uppercase;}
+  .today-tag{font-size:9px;letter-spacing:2px;color:#C0392B;padding:2px 6px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.1);}
+  .milestone{font-size:9px;letter-spacing:1px;color:#C0392B;font-weight:700;}
+  .day-count{font-size:10px;color:#555;letter-spacing:1px;margin-top:3px;}
+  .arrow{font-size:13px;color:#444;transition:transform .2s ease;}
+  .arrow.open{transform:rotate(90deg);}
+  .day-tasks{padding:0 14px 14px;display:none;flex-direction:column;gap:14px;}
+  .day-tasks.open{display:flex;}
+  .owner-head{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+  .task{display:flex;gap:9px;cursor:pointer;align-items:flex-start;user-select:none;padding:4px 0;}
+  .cb{width:16px;height:16px;min-width:16px;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px;border:1px solid;}
   .cb.checked{border-color:#555!important;background:rgba(255,255,255,.05);color:#666!important;}
-  .tx{font-size:12.5px;line-height:1.45;color:#CCC;}
+  .tx{font-size:12.5px;line-height:1.5;color:#CCC;}
   .tx.done{color:#555;text-decoration:line-through;}
-  .empty{font-size:12px;color:#444;font-style:italic;padding:6px 0;}
-  .complete{text-align:center;margin-top:36px;padding:24px;border:1px solid rgba(192,57,43,.3);background:rgba(192,57,43,.05);display:none;}
-  .complete .top{font-size:13px;letter-spacing:4px;color:#C0392B;}
-  .complete .bottom{font-size:11px;color:#666;margin-top:8px;letter-spacing:2px;}
-  @media(max-width:520px){.cols{flex-direction:column;gap:16px;}}
+  .complete-banner{text-align:center;margin-top:36px;padding:24px;border:1px solid rgba(192,57,43,.3);background:rgba(192,57,43,.05);display:none;}
+  .complete-banner .top{font-size:13px;letter-spacing:4px;color:#C0392B;}
+  .complete-banner .bottom{font-size:11px;color:#666;margin-top:8px;letter-spacing:2px;}
 </style>
 </head>
 <body>
@@ -51,36 +56,60 @@
   <div class="progress-info"><span id="tc">0 tasks</span><span id="tp">0%</span></div>
   <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
 </div>
-<div id="list"></div>
-<div class="complete" id="complete"><div class="top">ALL TASKS COMPLETE</div><div class="bottom">SHOW NIGHT AWAITS</div></div>
+<div class="filters">
+  <button class="active" data-view="all" onclick="setView('all')">All</button>
+  <button data-view="remaining" onclick="setView('remaining')">Remaining</button>
+</div>
+<div class="days" id="list"></div>
+<div class="complete-banner" id="complete"><div class="top">ALL TASKS COMPLETE</div><div class="bottom">SHOW NIGHT AWAITS</div></div>
 <script>
+const PHASES={
+ REHEARSE:{c:"#8B6CAE",bg:"rgba(139,108,174,.07)",bd:"rgba(139,108,174,.25)"},
+ TECH:{c:"#D4764E",bg:"rgba(212,118,78,.07)",bd:"rgba(212,118,78,.25)"},
+ DRESS:{c:"#C9B458",bg:"rgba(201,180,88,.07)",bd:"rgba(201,180,88,.25)"},
+ SHOW:{c:"#C0392B",bg:"rgba(192,57,43,.10)",bd:"rgba(192,57,43,.35)"},
+};
+const OWNERS={t:{label:"Tyler",color:"#D4764E"},c:{label:"Cansu",color:"#8B6CAE"}};
 const DAYS=[
- {d:"MON",dt:"Jun 15",tag:"DRY RUN TODAY",
+ {d:"MON",dt:"Jun 15",iso:"2026-06-15",phase:"REHEARSE",tag:"DRY RUN",
   tyler:["Dry run with props today — walk the full 8-min sequence, time every beat","Buy 2 button-down shirts (1950s style): one clean, one to splatter"],
   cansu:["Finish all 3 creature plates (70% → 100%)","Push projection mapping (65% → 85%)"]},
- {d:"TUE",dt:"Jun 16",tag:"",
+ {d:"TUE",dt:"Jun 16",iso:"2026-06-16",phase:"REHEARSE",tag:"",
   tyler:["Splatter shirt #2 with black/grey paint, let dry","Practice the shirt swap in the dark","Finalize the envelope line and handwrite it"],
   cansu:["Finish the bowl (last 20%)","Lock the blackout-one mask projection sequence"]},
- {d:"WED",dt:"Jun 17",tag:"INVITE GUESTS",
+ {d:"WED",dt:"Jun 17",iso:"2026-06-17",phase:"REHEARSE",tag:"INVITE GUESTS",
   tyler:["Invite all 8 guests, staggered arrivals every 15 min","Finish music (last 20%), export one continuous 8-min file"],
   cansu:["Lock blackout-two creature texture + breathing effect","Set up surround system (atmosphere) + Bose (monster), test both"]},
- {d:"THU",dt:"Jun 18",tag:"FULL TECH RUN",
+ {d:"THU",dt:"Jun 18",iso:"2026-06-18",phase:"TECH",tag:"FULL TECH RUN",
   tyler:["Full tech run start to finish: costume swap, fragments, all cues in sequence","Rehearse both blackouts in the dark with Cansu until automatic"],
   cansu:["Run all tech live: lights, projection, sound, creature, mask removal"]},
- {d:"FRI",dt:"Jun 19",tag:"DRESS REHEARSAL",
+ {d:"FRI",dt:"Jun 19",iso:"2026-06-19",phase:"DRESS",tag:"DRESS REHEARSAL",
   tyler:["Dress rehearsal for 1 trusted friend, get their reaction","Debrief, final timing tweaks, print the run sheet","Confirm guest times, send reminders"],
   cansu:["Final tech adjustments","Charge all devices, put backup music file on a 2nd device"]},
- {d:"SAT",dt:"Jun 20",tag:"SHOW NIGHT",show:true,
+ {d:"SAT",dt:"Jun 20",iso:"2026-06-20",phase:"SHOW",tag:"SHOW NIGHT",show:true,
   tyler:["Set the room: tunnel up, masks on wall, desk staged, clean shirt on","Lock final number of showings (4-8) + arrival schedule","Brief Cansu on full run-of-show, sync both blackouts","Perform all showings, then CELEBRATE"],
   cansu:["Final tech check 1 hr before — test every cue once","Run all tech during every showing","Film guest reactions at exit, document the night"]}
 ];
 let checked={};
 try{const s=localStorage.getItem("disint-v2");if(s)checked=JSON.parse(s);}catch(e){}
+let view="all";
+const todayISO=new Date().toLocaleDateString("en-CA");
+let open=(()=>{const i=DAYS.findIndex(d=>d.iso===todayISO);if(i>=0)return i;const r=DAYS.findIndex((d,di)=>!dayDone(di));return r>=0?r:0;})();
 function save(){try{localStorage.setItem("disint-v2",JSON.stringify(checked));}catch(e){}}
+function counts(di){let t=0,d=0;DAYS[di].tyler.forEach((x,i)=>{t++;if(checked["t-"+di+"-"+i])d++;});DAYS[di].cansu.forEach((x,i)=>{t++;if(checked["c-"+di+"-"+i])d++;});return{t,d};}
+function dayDone(di){const c=counts(di);return c.t>0&&c.d===c.t;}
 function toggle(k){if(checked[k])delete checked[k];else checked[k]=1;save();render();}
+function toggleDay(di){open=open===di?null:di;render();}
+function setView(v){view=v;document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));render();}
+function ownerBlock(day,di,who){
+ const o=OWNERS[who];const arr=who==="t"?day.tyler:day.cansu;
+ const rows=arr.map((tx,i)=>{const k=who+"-"+di+"-"+i;const c=checked[k];
+  return `<div class="task" onclick="toggle('${k}')"><div class="cb${c?" checked":""}" style="border-color:${c?"#555":o.color};color:${c?"#666":o.color}">${c?"✓":""}</div><div class="tx${c?" done":""}">${tx}</div></div>`;}).join("");
+ return `<div><div class="owner-head" style="color:${o.color}">${o.label}</div>${rows}</div>`;
+}
 function render(){
  let total=0,done=0;
- DAYS.forEach((day,di)=>{day.tyler.forEach((t,i)=>{total++;if(checked["t-"+di+"-"+i])done++;});day.cansu.forEach((t,i)=>{total++;if(checked["c-"+di+"-"+i])done++;});});
+ DAYS.forEach((day,di)=>{const c=counts(di);total+=c.t;done+=c.d;});
  const pct=Math.round(done/total*100);
  document.getElementById("tc").textContent=done+"/"+total+" tasks";
  document.getElementById("tp").textContent=pct+"%";
@@ -88,11 +117,27 @@ function render(){
  document.getElementById("complete").style.display=pct===100?"block":"none";
  const list=document.getElementById("list");list.innerHTML="";
  DAYS.forEach((day,di)=>{
-  const el=document.createElement("div");el.className="day"+(day.show?" show":"");
-  const tyTasks=day.tyler.map((t,i)=>{const k="t-"+di+"-"+i;const c=checked[k];return `<div class="task" onclick="toggle('${k}')"><div class="cb${c?" checked":""}">${c?"✓":""}</div><div class="tx${c?" done":""}">${t}</div></div>`;}).join("");
-  const cnTasks=day.cansu.map((t,i)=>{const k="c-"+di+"-"+i;const c=checked[k];return `<div class="task" onclick="toggle('${k}')"><div class="cb${c?" checked":""}">${c?"✓":""}</div><div class="tx${c?" done":""}">${t}</div></div>`;}).join("");
-  el.innerHTML=`<div class="day-title"><span class="d">${day.d}</span><span class="dt">${day.dt}</span>${day.tag?`<span class="tag">★ ${day.tag}</span>`:""}</div>
-   <div class="cols"><div class="col col-tyler"><div class="col-head">Tyler</div>${tyTasks}</div><div class="col col-cansu"><div class="col-head">Cansu</div>${cnTasks}</div></div>`;
+  const done2=dayDone(di);
+  if(view==="remaining"&&done2)return;
+  const ph=PHASES[day.phase];const c=counts(di);const isOpen=open===di;const isToday=day.iso===todayISO;
+  const el=document.createElement("div");el.className="day"+(done2?" complete":"");
+  el.style.background=isToday?"rgba(192,57,43,.06)":done2?"rgba(255,255,255,.02)":ph.bg;
+  el.style.border="1px solid "+(isToday?"rgba(192,57,43,.3)":done2?"#1A1A1A":ph.bd);
+  el.innerHTML=`
+   <div class="day-header" onclick="toggleDay(${di})">
+    <div class="day-num" style="color:${ph.c};opacity:${done2?.5:1}">${done2?"✓ "+day.d:day.d}</div>
+    <div class="day-meta">
+     <div class="day-meta-row">
+      <span class="day-date">${day.dt}</span>
+      <span class="phase-tag" style="color:${ph.c};border:1px solid ${ph.bd}">${day.phase}</span>
+      ${isToday?'<span class="today-tag">TODAY</span>':""}
+      ${day.tag?`<span class="milestone">★ ${day.tag}</span>`:""}
+     </div>
+     <div class="day-count">${c.d}/${c.t} done</div>
+    </div>
+    <div class="arrow${isOpen?" open":""}">▶</div>
+   </div>
+   <div class="day-tasks${isOpen?" open":""}">${ownerBlock(day,di,"t")}${ownerBlock(day,di,"c")}</div>`;
   list.appendChild(el);
  });
 }
